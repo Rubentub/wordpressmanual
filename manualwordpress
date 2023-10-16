@@ -1,0 +1,83 @@
+Para empezar he creado un directorio con el comando mkdir y lo he llamado "mkdir wordpress", a partir de crear el directorio he comenzado a poner varios comandos para tener el vagrant que son:
+ - vagrant init ubuntu/jammy64
+ - vagrant up --provider=virtualbox
+ - vagrant ssh
+
+Una vez utilizado estos comandos y ser vagrant@ubuntu-jammy, tendremos que actualizar la maquina. Para poder actualizar la maquina primero de todo nos tendremos que hacer root con este comando:
+ - sudo -s
+
+Una vez somos root tendremos que poner uno de estos comandos que nos sirven para actualizar la maquina:
+ - sudo apt update
+
+Despues de actualizar la maquina he tenido que instalar varios servidores web que son los siguientes:
+ - sudo apt install -y apache2
+ - sudo apt install -y mysql-server
+
+Despues instalaremos algunas librerias de php:
+ - sudo apt install -y php libapache2-mod-php
+ - sudo apt install -y php-fpm php-common php-mbstring php-xmlrpc php-soap php-gd php-xml php-intl php-mysql php-cli php-ldap php-zip php-curl
+
+Despues reiniciaremos el servidor apache 2:
+ - systemctl restart apache2
+
+Configuració de MySQL:
+
+Despues accedremos a la consola de MySQL con este comando:
+ - mysql
+
+Una vez dentro ejecutaremos un comando para crear la base de datos:
+ - CREATE DATABASE bbdd;
+
+Despues crearemos un usuario con su contraseña:
+ - CREATE USER 'usuario'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+
+Y le daremos privilegios al usuario:
+ - GRANT ALL ON bbdd.* to 'usuario'@'localhost';
+
+Una vez hecho todo esto saldremos de la base de datos:
+ - exit
+
+Una vez salido, tendremos que probar conexión a la base de datos:
+ - mysql -u usuario -p
+
+Una vez haber comprobado si nos podemos conectar a mysql, tendremos que ir a la pagina oficial de wordpress y descargarnos el archivo zip y tendremos que poner este comando:
+ - mv /vagrant/wordpress.6.3.2.zip /var/www/html/
+
+Una vez habernos bajado esto habra que descomprimirlo con el siguiente comando:
+
+ - unzip owncloud.zip
+
+Despues de descomprimir el archivo de wordpress, tendremos que crear un directorio en el cual daremos unos permisos. El directorio se llama:
+
+ - cd /var/www/html
+
+Y dentro de este directorio tendremos que poner estos comandos:
+
+ - sudo chmod -R 775 .
+ - sudo chown -R root:www-data
+
+Despues tendremos que modificar varios parametros en el archivo. Con el siguiente comando:
+ - vi Vagrantfile
+
+Y habra que configurar estos parametros:
+ - config.vm.network "forwarded_port", guest: 80, host: 8080
+ - config.vm.network "public_network"
+
+Una vez hecho todo tendremos que reiniciar el vagrant:
+ - vagrant reload
+
+Y despues haremos:
+ - vagrant ssh
+
+ - vi Vagrantfile
+
+Y habra que configurar estos parametros:
+ - config.vm.network "forwarded_port", guest: 80, host: 8080
+ - config.vm.network "public_network"
+
+Una vez hecho todo tendremos que reiniciar el vagrant:
+ - vagrant reload
+
+Y despues haremos:
+ - vagrant ssh
+
